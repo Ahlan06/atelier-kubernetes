@@ -2,7 +2,7 @@
 
 > Complétez ce fichier au fil de l'atelier, puis faites un commit et un push (voir la section « Rendu » du README).
 
-**Nom / Prénom :**
+**Nom / Prénom : MIRA Ahlan**
 **Groupe :**
 
 ---
@@ -10,23 +10,23 @@
 ## Exercice 1 — Cluster
 
 1. Combien de nœuds affiche `kubectl get nodes` ? Quel est le rôle de chacun ?
-   >
+   > 3 nœuds : `k3d-lab-server-0` est le control plane, et `k3d-lab-agent-0` et `k3d-lab-agent-1` sont les deux workers.
 2. Que montre `docker ps` ? Qu'est-ce qu'un « nœud » dans k3d, concrètement ?
-   >
+   > `docker ps` liste les conteneurs Docker en cours d'exécution. Dans k3d, chaque nœud Kubernetes est concrètement un conteneur Docker qui exécute k3s : le server héberge le control plane et les agents servent de workers.
 
 ## Exercice 2 — Premier déploiement
 
 3. Quels objets Kubernetes ont été créés par `kubectl create deployment` ? (indice : `kubectl get all`)
-   >
+   > `kubectl create deployment` crée un Deployment, qui crée un ReplicaSet chargé de maintenir un pod nginx en fonctionnement. La commande `kubectl expose` a ensuite créé le Service `web`.
 4. Vous avez supprimé le pod `web-...` : que s'est-il passé, et pourquoi ?
-   >
+   > Le pod supprimé a été remplacé par un nouveau pod avec un nom différent. Le ReplicaSet du Deployment maintient le nombre désiré de réplicas (ici 1) et recrée un pod quand celui-ci est supprimé.
 
 ## Exercice 3 — Modifier un conteneur en direct
 
 5. Après suppression du pod, votre message « Bienvenue... » a-t-il survécu ? Pourquoi ?
-   >
+   > Non. Le nouveau pod repart de l'image nginx d'origine : les modifications faites directement dans le système de fichiers du conteneur sont éphémères et disparaissent avec le pod.
 6. Pourquoi le `port-forward` a-t-il cessé de fonctionner après la suppression du pod ?
-   >
+   > Le port-forward était relié à un pod précis. Quand ce pod a été supprimé, le tunnel a été interrompu, même si le Service `web` a ensuite un nouveau pod comme cible.
 
 ## Exercice 4 — Déclaratif
 
